@@ -1,3 +1,10 @@
+<input type=text class=qrcode-text
+><label class="qrcode-text-btn">
+  <input type=file
+    accept="image/*"
+    capture=environment
+  onchange="openQRCamera(this);">
+</label>
 <%= form_for @post do |f| %>
 <p>
   <%= f.text_field :title, placeholder: 'enter title' %>
@@ -14,4 +21,5 @@
 <p>
   <%= f.submit %>
 </p>
+
 <% end %>
