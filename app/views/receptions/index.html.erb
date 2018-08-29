@@ -1,0 +1,20 @@
+<h2>
+<%= link_to 'Add New', new_reception_path, class: 'header-menu' %>
+Receptions
+</h2>
+<ul>
+    <% @receptions.each do |reception| %>
+        <li>
+        <%=link_to reception.productno, reception_path(reception.id) %>
+        <%= reception.quantity %>
+        <%=link_to '[編集]', edit_reception_path(reception), claa: 'command' %>
+        <%=link_to '[×]' ,
+            reception_path(reception),
+            method: :delete, 
+            class: 'command',
+            data: { confirm: '削除してよろしいですか？' }%>
+        </li>
+    <% end %>
+</ul>
+
+

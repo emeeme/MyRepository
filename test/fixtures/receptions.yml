@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  productno: MyString
+  lotno: MyString
+  producttype: MyString
+  steeltype: MyString
+  size: MyString
+  quantity: 1
+
+two:
+  productno: MyString
+  lotno: MyString
+  producttype: MyString
+  steeltype: MyString
+  size: MyString
+  quantity: 1

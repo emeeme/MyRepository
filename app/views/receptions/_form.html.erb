@@ -1,0 +1,37 @@
+<label class="qrcode-text-btn">
+  <input type=file
+    accept="image/*"
+    capture=environment
+  onchange="openQRCamera(this);">
+</label>
+
+<%= form_for @reception do |f| %>
+<P>
+  <label>製品番号</label>
+  <%= f.text_field :productno, placeholder: '製品番号を入力して下さい。' %>
+</P>
+<P>
+  <label>製造番号</label>
+  <%= f.text_field :lotno, placeholder: '製造番号を入力して下さい。' %>
+</P>
+<P>
+  <label>製造コード</label>
+  <%= f.text_field :producttype, placeholder: '製品コードを入力して下さい。' %>
+</P>
+<P>
+<label>鋼種</label>
+  <%= f.text_field :steeltype, placeholder: '鋼種を入力して下さい。' %>
+</P>
+<P>
+<label>サイズ</label>
+  <%= f.text_field :size, placeholder: 'サイズを入力して下さい。' %>
+</P>
+<P>
+<label>数量</label>
+  <%= f.text_field :quantity, placeholder: '数量を入力して下さい。' %>
+</P>
+<P>
+  <%= f.submit %>
+</P>
+
+<% end %>
