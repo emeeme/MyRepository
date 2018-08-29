@@ -2,6 +2,12 @@ Rails.application.routes.draw do
   resources :posts do
     resources :comments, only: [:create, :destroy]
   end
-  root 'posts#index'
+  
+  # これだけでcreate,new,edit,show,update,destroy作られる
+  resources :receptions
+
+  # root 'posts#index'
+  root 'receptions#index'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
