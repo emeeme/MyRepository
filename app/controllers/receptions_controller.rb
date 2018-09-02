@@ -1,7 +1,7 @@
 class ReceptionsController < ApplicationController
 
   def index
-    @receptions = Reception.all.order(created_at:'desc')
+    @receptions = Reception.all.order(productno:'asc')
   end
 
   def show
@@ -13,9 +13,9 @@ class ReceptionsController < ApplicationController
   end
 
   def create
-    @reception = Reseption.new(reception_params)
-    if @post.save
-        redirect_to reception_path
+    @reception = Reception.new(reception_params)
+    if @reception.save
+        redirect_to receptions_path
     else
         render 'new'
     end
@@ -26,7 +26,7 @@ class ReceptionsController < ApplicationController
   end
 
   def update
-    @post = Reception.find(params[:id])
+    @reception = Reception.find(params[:id])
     if @reception.update(reception_params)
         redirect_to receptions_path
     else
@@ -35,14 +35,26 @@ class ReceptionsController < ApplicationController
   end
 
   def destroy
-    @post = Reception.find(params[:id])
-    @post.destroy
+    @reception = Reception.find(params[:id])
+    @reception.destroy
     redirect_to receptions_path
+  end
+
+  def import
+    Reception.import(params[:file])
+    redirect_to root_url, notice: "追加しました。"
   end
 
   private 
     def reception_params
-        params.require(:reception).permit(:productno ,:lotno, :producttype, :steeltype, :size, :quantity)
+        params.require(:reception)
+        .permit(
+          :productno ,
+          :lotno, 
+          :producttype, 
+          :steeltype, 
+          :size, 
+          :quantity)
     end
 
 end

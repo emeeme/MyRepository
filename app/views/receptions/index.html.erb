@@ -1,14 +1,19 @@
 <h2>
-<%= link_to 'Add New', new_reception_path, class: 'header-menu' %>
-Receptions
+<%= link_to '新規', new_reception_path, class: 'header-menu' %>
+一覧
 </h2>
 <ul>
     <% @receptions.each do |reception| %>
         <li>
         <%=link_to reception.productno, reception_path(reception.id) %>
+        <%= reception.id %>
+        <%= reception.lotno %>
+        <%= reception.producttype %>
+        <%= reception.steeltype %>
+        <%= reception.size %>
         <%= reception.quantity %>
         <%=link_to '[編集]', edit_reception_path(reception), claa: 'command' %>
-        <%=link_to '[×]' ,
+        <%=link_to '[削除]' ,
             reception_path(reception),
             method: :delete, 
             class: 'command',
@@ -17,4 +22,8 @@ Receptions
     <% end %>
 </ul>
 
-
+<%= form_tag import_receptions_path, multipart: true do %>
+    <%= file_field_tag :file %>    
+    <%= submit_tag "インポート" 
+    %>
+<% end %>
