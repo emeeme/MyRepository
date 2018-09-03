@@ -45,6 +45,10 @@ class ReceptionsController < ApplicationController
     redirect_to root_url, notice: "追加しました。"
   end
 
+  def print
+    Reception.print
+  end
+
   private 
     def reception_params
         params.require(:reception)
