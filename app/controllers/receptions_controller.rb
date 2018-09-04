@@ -25,6 +25,31 @@ class ReceptionsController < ApplicationController
     @reception = Reception.find(params[:id])
   end
 
+  def print
+    @reception = Reception.find(params[:id])
+    #require 'thinreports'
+    report = Thinreports::Report.new layout: 'app/pdfs/sampleprint.tlf'
+
+    # 1st page
+    report.start_new_page
+    report.page.item(:productno).value(@reception.productno)
+    report.page.item(:lotno).value(@reception.lotno)
+    report.page.item(:producttype).value(@reception.producttype)
+    report.page.item(:steeltype).value(@reception.steeltype)
+    report.page.item(:size).value(@reception.size)
+    report.page.item(:quantity).value(@reception.quantity)
+    #report.generate(filename: 'sample.pdf')
+
+    # ブラウザでPDFを表示させたい場合
+    # パラメタのdisposition: "inline" をつけない場合は、PDFがダウンロードされる
+    # ,disposition: "inline"
+    send_data(
+    report.generate,
+    filename:    "#{@reception.productno}.pdf",
+    type:        "application/pdf"
+    )
+  end
+
   def update
     @reception = Reception.find(params[:id])
     if @reception.update(reception_params)
@@ -45,9 +70,6 @@ class ReceptionsController < ApplicationController
     redirect_to root_url, notice: "追加しました。"
   end
 
-  def print
-    Reception.print
-  end
 
   private 
     def reception_params

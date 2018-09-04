@@ -10,7 +10,8 @@
         <%= reception.steeltype %>
         <%= reception.size %>
         <%= reception.quantity %>
-        <%=link_to '[編集]', edit_reception_path(reception), claa: 'command' %>
+        <%=link_to '[編集]', edit_reception_path(reception), claas: 'command' %>
+        <%=link_to '[印刷]', print_reception_path(reception), claas: 'command' %>
         <%=link_to '[削除]' ,
             reception_path(reception),
             method: :delete, 
