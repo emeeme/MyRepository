@@ -2,7 +2,7 @@
   <input type=file
     accept="image/*"
     capture=environment
-  onchange="openQRCamera(this);">
+    onchange="openQRCamera(this);">
 </label>
 
 <%= form_for @reception do |f| %>
@@ -33,5 +33,4 @@
 <P>
   <%= f.submit %>
 </P>
-
 <% end %>

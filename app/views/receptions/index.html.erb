@@ -22,7 +22,6 @@
 </ul>
 
 <%= form_tag import_receptions_path, multipart: true do %>
-    <%= file_field_tag :file %>    
-    <%= submit_tag "インポート" 
-    %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "インポート" %>
 <% end %>

@@ -38,7 +38,8 @@ class ReceptionsController < ApplicationController
     report.page.item(:steeltype).value(@reception.steeltype)
     report.page.item(:size).value(@reception.size)
     report.page.item(:quantity).value(@reception.quantity)
-    #report.generate(filename: 'sample.pdf')
+
+    #report.page.item(:qrimage).value(makeqr)
 
     # ブラウザでPDFを表示させたい場合
     # パラメタのdisposition: "inline" をつけない場合は、PDFがダウンロードされる
@@ -48,6 +49,21 @@ class ReceptionsController < ApplicationController
     filename:    "#{@reception.productno}.pdf",
     type:        "application/pdf"
     )
+  end
+
+  def makeqr()
+    # -*- encoding: sjis -*-
+    require 'rqrcode'
+    require 'rqrcode_png'
+    require 'chunky_png'
+
+    # 「Hello Wolrd!!」いう文字列、サイズは3、誤り訂正レベルHのQRコードを生成する
+    qr = RQRCode::QRCode.new( "Hello World!!", :size => 3, :level => :h )
+    png = qr.to_img
+
+    #200×200にリサイズして「hello_world.png」というファイル名で保存する
+    png.resize(200, 200).save("hello_world.png")
+    return png
   end
 
   def update
@@ -69,7 +85,6 @@ class ReceptionsController < ApplicationController
     Reception.import(params[:file])
     redirect_to root_url, notice: "追加しました。"
   end
-
 
   private 
     def reception_params
