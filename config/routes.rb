@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :receptions do
     collection do
       post :import 
+      get :csv_output
     end
     member do 
       get :print

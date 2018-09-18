@@ -41,7 +41,20 @@ class ReceptionsController < ApplicationController
     report.page.item(:size).value(@reception.size)
     report.page.item(:quantity).value(@reception.quantity)
 
-    #report.page.item(:qrimage).src(makeqr)
+    rowstring = ""
+    rowstring += @reception.productno
+    rowstring += ","
+    rowstring += @reception.lotno
+    rowstring += ","
+    rowstring += @reception.producttype
+    rowstring += ","
+    rowstring += @reception.steeltype
+    rowstring += ","
+    rowstring += @reception.size
+    rowstring += ","
+    rowstring += @reception.quantity.to_s
+    report.page.item(:qrimage).src(barcode(
+    :qr_code, rowstring, ydim: 5, xdim: 5))
 
 
     # ブラウザでPDFを表示させたい場合
@@ -54,55 +67,24 @@ class ReceptionsController < ApplicationController
     )
   end
 
-  def makeqr2()
-    require 'rqrcode'
-    require 'rqrcode_png'
-    require 'chunky_png' # to_data_urlはchunky_pngのメソッド
+  require 'bundler'
+  Bundler.require
+  
+  require 'barby/barcode/ean_13'
+  require 'barby/barcode/ean_8'
+  require 'barby/barcode/qr_code'
+  require 'barby/outputter/png_outputter'
 
-    content = 'aaa'
-    size    = 3
-    # 1..40
-    level   = :m         
-    # l, m, q, h
-
-    qr = RQRCode::QRCode.new(content, size: size, level: level)
-    # png変換->リサイズ->base64エンコード
-    return qr.to_img.resize(200, 200).to_data_url
-
-  end
-
-  def makeqr()
-    # -*- encoding: sjis -*-
-    require 'rqrcode'
-    require 'chunky_png' 
-    require 'base64'
-    require 'stringio'
-
-    # 「Hello Wolrd!!」いう文字列、サイズは3、誤り訂正レベルHのQRコードを生成する
-    qr = RQRCode::QRCode.new( "Hello World!!", :size => 3, :level => :h )
-
-
-    png = qr.to_img
-
-    return png
-    
-    #200×200にリサイズして「hello_world.png」というファイル名で保存する
-    png.resize(200, 200).save("hello_world.png")
-
-   
-    #return qr.as_png.resize(500,500)
-    
-    red_dot = png.to_data_url
-
-    #red_dot = 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4' +
-    #          '//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
-    base64_image = StringIO.new(Base64.decode64(red_dot))
-    return base64_image
-   
-    #return 
-    #return StringIO.new(Base64.decode64(ChunkyPNG::Image.from_datastream(
-    #  qr.as_png.resize(500,500).to_datastream).to_data_url))
-
+  def barcode(type, data, png_opts = {})
+    code = case type
+    when :ean_13
+      Barby::EAN13.new(data)
+    when :ean_8
+      Barby::EAN8.new(data)
+    when :qr_code
+      Barby::QrCode.new(data)
+    end
+    StringIO.new(code.to_png(png_opts))
   end
 
   def update
@@ -123,6 +105,11 @@ class ReceptionsController < ApplicationController
   def import
     Reception.import(params[:file])
     redirect_to root_url, notice: "追加しました。"
+  end
+
+  def csv_output
+    @receptions = Reception.all
+    send_data render_to_string, filename: "reception.csv", type: :csv
   end
 
   private 

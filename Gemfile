@@ -74,3 +74,4 @@ gem 'chunky_png'
 
 gem 'rqrcode_png'
 
+gem 'barby'
