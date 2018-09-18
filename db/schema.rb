@@ -12,30 +12,30 @@
 
 ActiveRecord::Schema.define(version: 2018_08_29_040807) do
 
-  create_table "coments", force: :cascade do |t|
+  create_table "coments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "body"
-    t.integer "post_id"
+    t.bigint "post_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_coments_on_post_id"
   end
 
-  create_table "comments", force: :cascade do |t|
+  create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "body"
-    t.integer "post_id"
+    t.bigint "post_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
   end
 
-  create_table "posts", force: :cascade do |t|
+  create_table "posts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "title"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "receptions", force: :cascade do |t|
+  create_table "receptions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "productno"
     t.string "lotno"
     t.string "producttype"
@@ -46,4 +46,6 @@ ActiveRecord::Schema.define(version: 2018_08_29_040807) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "coments", "posts"
+  add_foreign_key "comments", "posts"
 end

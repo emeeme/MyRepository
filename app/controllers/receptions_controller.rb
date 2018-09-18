@@ -26,6 +26,8 @@ class ReceptionsController < ApplicationController
   end
 
   def print
+ 
+
     @reception = Reception.find(params[:id])
     #require 'thinreports'
     report = Thinreports::Report.new layout: 'app/pdfs/sampleprint.tlf'
@@ -39,7 +41,8 @@ class ReceptionsController < ApplicationController
     report.page.item(:size).value(@reception.size)
     report.page.item(:quantity).value(@reception.quantity)
 
-    #report.page.item(:qrimage).value(makeqr)
+    #report.page.item(:qrimage).src(makeqr)
+
 
     # ブラウザでPDFを表示させたい場合
     # パラメタのdisposition: "inline" をつけない場合は、PDFがダウンロードされる
@@ -51,19 +54,55 @@ class ReceptionsController < ApplicationController
     )
   end
 
+  def makeqr2()
+    require 'rqrcode'
+    require 'rqrcode_png'
+    require 'chunky_png' # to_data_urlはchunky_pngのメソッド
+
+    content = 'aaa'
+    size    = 3
+    # 1..40
+    level   = :m         
+    # l, m, q, h
+
+    qr = RQRCode::QRCode.new(content, size: size, level: level)
+    # png変換->リサイズ->base64エンコード
+    return qr.to_img.resize(200, 200).to_data_url
+
+  end
+
   def makeqr()
     # -*- encoding: sjis -*-
     require 'rqrcode'
-    require 'rqrcode_png'
-    require 'chunky_png'
+    require 'chunky_png' 
+    require 'base64'
+    require 'stringio'
 
     # 「Hello Wolrd!!」いう文字列、サイズは3、誤り訂正レベルHのQRコードを生成する
     qr = RQRCode::QRCode.new( "Hello World!!", :size => 3, :level => :h )
+
+
     png = qr.to_img
 
+    return png
+    
     #200×200にリサイズして「hello_world.png」というファイル名で保存する
     png.resize(200, 200).save("hello_world.png")
-    return png
+
+   
+    #return qr.as_png.resize(500,500)
+    
+    red_dot = png.to_data_url
+
+    #red_dot = 'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4' +
+    #          '//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
+    base64_image = StringIO.new(Base64.decode64(red_dot))
+    return base64_image
+   
+    #return 
+    #return StringIO.new(Base64.decode64(ChunkyPNG::Image.from_datastream(
+    #  qr.as_png.resize(500,500).to_datastream).to_data_url))
+
   end
 
   def update
