@@ -8,6 +8,8 @@ default: &default
   adapter: mysql2
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
+  username: root
+  password: Ttk12345
 
 development:
   adapter: mysql2
@@ -15,7 +17,7 @@ development:
   database: sampledb
   pool: 5
   username: root
-  password: ttk12345
+  password: Ttk12345
   socket: /var/lib/mysql/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
